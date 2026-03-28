@@ -68,6 +68,9 @@ show interfaces trunk
 show vlan brief           ! Ver puertos access y su VLAN
 show interfaces trunk     ! Ver puertos trunk y VLANs permitidas
 show interfaces status    ! Ver estado de todos los puertos
+show cdp neighbors        ! Ver los dispositivos que están conectados
+show mac address-table    ! Ver MAC que está en cada puerto
+show interface fa0/1      ! Ver el estado de un puerto en específico
 ```
 
 ## Fase 6
