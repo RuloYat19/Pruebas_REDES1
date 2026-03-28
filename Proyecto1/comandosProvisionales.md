@@ -63,6 +63,13 @@ exit
 show interfaces trunk
 ```
 
+### Comandos de verificación
+```
+show vlan brief           ! Ver puertos access y su VLAN
+show interfaces trunk     ! Ver puertos trunk y VLANs permitidas
+show interfaces status    ! Ver estado de todos los puertos
+```
+
 ## Fase 6
 ### Configuración EtherChannel - PAgP
 ```
