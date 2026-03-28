@@ -30,7 +30,7 @@
 
 4. Verificar con show vtp status que todos tengan el mismo dominio y contraseña.
 
-### Fase 4: Creación de VLANs (solo en el Server)
+### Fase 4: Creación de VLANs (solo en el Server y en el Transparente)
 1. En SW-A1 (Server), crear todas las VLANs:
 ```
 vlan 12
