@@ -4,7 +4,7 @@
 |Fase 2|Sí|
 |Fase 3|Sí|
 |Fase 4|Sí|
-|Fase 5||
+|Fase 5|Sí|
 |Fase 6||
 |Fase 7||
 |Fase 8||

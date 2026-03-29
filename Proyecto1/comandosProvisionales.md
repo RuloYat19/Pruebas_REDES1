@@ -96,7 +96,7 @@ configure terminal
 interface range fastEthernet 0/1-2
 channel-group 1 mode passive
 switchport mode trunk
-switchport trunk allowed vlan all
+switchport trunk allowed vlan 12,22,32,42,52
 no shutdown
 end
 write
@@ -110,7 +110,7 @@ configure terminal
 interface range fastEthernet 0/3-4
 channel-group 2 mode desirable
 switchport mode trunk
-switchport trunk allowed vlan all
+switchport trunk allowed vlan 12,22,32,42,52
 no shutdown
 end
 write
@@ -123,7 +123,7 @@ configure terminal
 interface range fastEthernet 0/2-3
 channel-group 2 mode auto
 switchport mode trunk
-switchport trunk allowed vlan all
+switchport trunk allowed vlan 12,22,32,42,52
 no shutdown
 end
 write
@@ -134,7 +134,7 @@ write
 ```
 interface port-channel 1
 switchport mode trunk
-switchport trunk allowed vlan all
+switchport trunk allowed vlan 12,22,32,42,52
 no shutdown
 exit
 ```
