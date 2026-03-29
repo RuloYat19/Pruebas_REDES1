@@ -74,15 +74,93 @@ show interface fa0/1      ! Ver el estado de un puerto en específico
 ```
 
 ## Fase 6
-### Configuración EtherChannel - PAgP
+### Configuración EtherChannel
+#### 1. EtherChannel con LACP (fibra entre edificios)
+##### En SW-A1 (lado activo):
 ```
 enable
 configure terminal
 interface range fastEthernet 0/1-2
-channel-group 1 mode desirable
+channel-group 1 mode active
 switchport mode trunk
 switchport trunk allowed vlan 12,22,32,42,52
 no shutdown
-exit
-show etherchannel summary
+end
+write
 ```
+
+##### En SW-B1 (lado pasivo):
+```
+enable
+configure terminal
+interface range fastEthernet 0/1-2
+channel-group 1 mode passive
+switchport mode trunk
+switchport trunk allowed vlan all
+no shutdown
+end
+write
+```
+
+#### 2. EtherChannel con PAgP (UTP dentro del mismo edificio)
+##### En SW-A2 (lado desirable - inicia):
+```
+enable
+configure terminal
+interface range fastEthernet 0/3-4
+channel-group 2 mode desirable
+switchport mode trunk
+switchport trunk allowed vlan all
+no shutdown
+end
+write
+```
+
+##### En SW-A3 (lado auto - espera):
+```
+enable
+configure terminal
+interface range fastEthernet 0/2-3
+channel-group 2 mode auto
+switchport mode trunk
+switchport trunk allowed vlan all
+no shutdown
+end
+write
+```
+
+#### 3. Configurar el Port-Channel (opcional pero recomendado)
+##### Después de crear el EtherChannel, puedes configurar directamente la interfaz lógica:
+```
+interface port-channel 1
+switchport mode trunk
+switchport trunk allowed vlan all
+no shutdown
+exit
+```
+
+### Comandos de verificación
+```
+show etherchannel summary
+show etherchannel port-channel
+show interfaces trunk
+```
+
+##### Ejemplo de salida exitosa:
+```
+Group  Port-channel  Protocol  Ports
+------+-------------+---------+----------------------
+1      Po1(SU)       LACP     Fa0/1(P)  Fa0/2(P)
+2      Po2(SU)       PAgP     Fa0/3(P)  Fa0/4(P)
+```
+
+## Tabla de EtherChannels
+
+| Enlace | Switches | Puertos | Protocolo | Modo A | Modo B |
+|--------|----------|---------|-----------|--------|--------|
+| Fibra A ↔ B | SW-A1 ↔ SW-B1 | Fa0/1-2 | LACP | active | passive |
+| Fibra A ↔ C | SW-A1 ↔ SW-C4 | Fa0/3-4 | LACP | active | passive |
+| Fibra C ↔ D | SW-C4 ↔ SW-D1 | Fa0/1-2 | LACP | active | passive |
+| Fibra D ↔ B | SW-D5 ↔ SW-B2 | Fa0/1-2 | LACP | active | passive |
+| Fibra B interno | SW-B1 ↔ SW-B2 | Fa0/3-4 | LACP | active | passive |
+| UTP A interno | SW-A2 ↔ SW-A3 | Fa0/3-4 | PAgP | desirable | auto |
