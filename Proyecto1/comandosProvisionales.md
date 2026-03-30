@@ -164,3 +164,19 @@ Group  Port-channel  Protocol  Ports
 | Fibra D ↔ B | SW-D5 ↔ SW-B2 | Fa0/1-2 | LACP | active | passive |
 | Fibra B interno | SW-B1 ↔ SW-B2 | Fa0/3-4 | LACP | active | passive |
 | UTP A interno | SW-A2 ↔ SW-A3 | Fa0/3-4 | PAgP | desirable | auto |
+
+## Fase 7
+#### Configurar SW-A1 como Root Bridge:
+```
+enable
+configure terminal
+spanning-tree mode pvst
+spanning-tree vlan 12,22,32,42,52 priority 4096
+```
+
+#### En los demás switches, solo activar el modo:
+```
+enable
+configure terminal
+spanning-tree mode pvst
+```

@@ -76,12 +76,16 @@ no shutdown
 ### Fase 7: Configuración de STP
 1. Configurar SW-A1 como Root Bridge:
 ```
+enable
+configure terminal
 spanning-tree mode pvst
 spanning-tree vlan 12,22,32,42,52 priority 4096
 ```
 
 2. En los demás switches, solo activar el modo:
 ```
+enable
+configure terminal
 spanning-tree mode pvst
 ```
 
