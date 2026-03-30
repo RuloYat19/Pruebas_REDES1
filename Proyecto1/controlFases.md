@@ -12,4 +12,4 @@
 |Fase 10||
 
 ## Notas
-Admin1, Docencia6, Docencia 1-3 no funkan
+Docencia6 y Biblioteca2 no funkan
