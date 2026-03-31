@@ -13,3 +13,10 @@
 
 ## Notas
 Docencia6 y Biblioteca2 no funkan
+
+## Control de ping
+|Nombre de Dispositivo|¿Hace ping? Si/No|
+|--|--|
+|Admin2|Sí|
+|Admin2|Sí|
+|Admin2|Sí|
