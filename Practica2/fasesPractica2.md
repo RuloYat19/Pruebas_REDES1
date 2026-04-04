@@ -2,7 +2,7 @@
 ### Fase 1: Seleccionar los 6 hospitales reales
 Eligir 6 hospitales o centros de salud del área metropolitana (por ejemplo: Hospital Roosevelt, San Juan de Dios, etc.). Asegurarse de que sean reales.
 
-### Fase 2: Seleccionar los 6 hospitales reales
+### Fase 2: Definir la topología física
 Decidir qué tipo de topología usarás:
 
 - Estrella
