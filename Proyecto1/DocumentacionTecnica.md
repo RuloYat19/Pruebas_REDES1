@@ -161,64 +161,87 @@
 
 ## Pruebas de ping
 ### Para la VLAN 12 - ADMIN
+**Ping de Admin1 hacia Admin2**
 ![Ping1](Imagenes/I28.png)
+
+**Ping de Admin3 hacia Admin4**
 ![Ping2](Imagenes/I29.png)
 
 ### Para la VLAN 22 - DOCENTES
+**Ping de Docencia6 hacia Docencia1**
 ![Ping1](Imagenes/I30.png)
+
+**Ping de Docencia8 hacia Docencia10**
 ![Ping2](Imagenes/I31.png)
 
 ### Para la VLAN 32 - BIBLIOTECA
+**Ping de Biblioteca1 hacia Biblioteca6**
 ![Ping1](Imagenes/I32.png)
+
+**Ping de Biblioteca3 hacia Biblioteca7**
 ![Ping2](Imagenes/I33.png)
 
 ### Para la VLAN 42 - LABORATORIO
+**Ping de Laboratorio2 hacia Laboratorio4**
 ![Ping1](Imagenes/I34.png)
+
+**Ping de Laboratorio4 hacia Laboratorio3**
 ![Ping2](Imagenes/I35.png)
 
 ### Para la VLAN 52 - VISITANTES
+**Ping de Visitantes1 hacia Visitantes2**
 ![Ping1](Imagenes/I36.png)
+
+**Ping de Visitantes2 hacia Visitantes3**
 ![Ping2](Imagenes/I37.png)
 
 ## Capturas de show
 ### show spanning-tree
 #### Edificio A
-![Captura Switch Edificio A](Imagenes/I37.png)
+![Captura Switch Edificio A](Imagenes/I38.png)
+![Captura Switch Edificio A](Imagenes/I39.png)
+![Captura Switch Edificio A](Imagenes/I40.png)
 
 #### Edificio B
-![Captura Switch Edificio B](Imagenes/I38.png)
+![Captura Switch Edificio B](Imagenes/I41.png)
+![Captura Switch Edificio B](Imagenes/I42.png)
+![Captura Switch Edificio B](Imagenes/I43.png)
 
 #### Edificio C
-![Captura Switch Edificio C](Imagenes/I39.png)
+![Captura Switch Edificio C](Imagenes/I44.png)
+![Captura Switch Edificio C](Imagenes/I45.png)
+![Captura Switch Edificio C](Imagenes/I46.png)
 
 #### Edificio D
-![Captura Switch Edificio D](Imagenes/I40.png)
+![Captura Switch Edificio D](Imagenes/I47.png)
+![Captura Switch Edificio D](Imagenes/I48.png)
+![Captura Switch Edificio D](Imagenes/I49.png)
 
 ### show etherchannel summary
 #### Edificio A
-![Captura Switch Edificio A](Imagenes/I41.png)
+![Captura Switch Edificio A](Imagenes/I50.png)
 
 #### Edificio B
-![Captura Switch Edificio B](Imagenes/I42.png)
+![Captura Switch Edificio B](Imagenes/I51.png)
 
 #### Edificio C
-![Captura Switch Edificio C](Imagenes/I43.png)
+![Captura Switch Edificio C](Imagenes/I52.png)
 
 #### Edificio D
-![Captura Switch Edificio D](Imagenes/I44.png)
+![Captura Switch Edificio D](Imagenes/I53.png)
 
 ### show interfaces trunk
 #### Edificio A
-![Captura Switch Edificio A](Imagenes/I45.png)
+![Captura Switch Edificio A](Imagenes/I54.png)
 
 #### Edificio B
-![Captura Switch Edificio B](Imagenes/I46.png)
+![Captura Switch Edificio B](Imagenes/I55.png)
 
 #### Edificio C
-![Captura Switch Edificio C](Imagenes/I47.png)
+![Captura Switch Edificio C](Imagenes/I56.png)
 
 #### Edificio D
-![Captura Switch Edificio D](Imagenes/I48.png)
+![Captura Switch Edificio D](Imagenes/I57.png)
 
 ## Presupuesto estimado de equipos
 
