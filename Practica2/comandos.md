@@ -1,125 +1,372 @@
-### Configuración base para todos los switches
+## 0. Configuración base para todos los switches
 enable
 configure terminal
 
-#### Hostname (ejemplo para Roosevelt)
-hostname SW-Roosevelt
+**Nombre del switch**
+hostname SW-Central
 
-#### Deshabilitar búsqueda DNS
+**Deshabilitar búsqueda DNS**
 no ip domain-lookup
 
-#### Contraseña de acceso (con tu carnet 202300722)
+**Configurar contraseña de enable**
 enable secret 202300722
+
+**Configurar contraseña de consola**
 line console 0
 password 202300722
 login
 exit
+
+**Configurar contraseña para acceso remoto (telnet/ssh)**
 line vty 0 15
 password 202300722
 login
 exit
 
-#### VLANs (mismas en todos los switches)
+**Guardar configuración inicial**
+end
+write memory
+
+## 1. Configuración de Principal-SW (Primero)
+### 1.1 Configuración base (arriba)
+### 1.2 Crear VLANs manualmente
+enable
+configure terminal
+
 vlan 12
 name Quirofanos
 exit
+
 vlan 22
 name UCI
 exit
+
 vlan 32
 name Emergencias
 exit
+
 vlan 42
 name Administracion
 exit
+
 vlan 52
 name Laboratorios
 exit
+
 vlan 99
 name Nativa
 exit
+
 vlan 999
 name Blackhole
 exit
 
-### Configuración de puertos de acceso (por hospital)
-interface range fastEthernet 0/1-3
+### 1.3 Configurar VTP como Servidor
+enable
+configure terminal
+
+vtp mode server
+vtp domain 202300722
+vtp password area2
+
+**Verificar VTP**
+show vtp status
+
+### 1.4 Configurar EtherChannel hacia Este-SW
+enable
+configure terminal
+
+**Crear Port-Channel 1**
+interface port-channel 1
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed vlan 12,22,32,42,52,99
+exit
+
+**Asignar interfaces físicas al Port-Channel 1**
+interface range gigabitEthernet 0/1/1-3
+channel-group 1 mode desirable
+exit
+
+**Verificar EtherChannel**
+show etherchannel summary
+
+### 1.5 Configurar EtherChannel hacia Oeste-SW
+enable
+configure terminal
+
+**Crear Port-Channel 2**
+interface port-channel 2
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed vlan 12,22,32,42,52,99
+exit
+
+**Asignar interfaces físicas al Port-Channel 2**
+interface range gigabitEthernet 0/2/1-3
+channel-group 2 mode desirable
+exit
+
+**Verificar EtherChannel**
+show etherchannel summary
+
+### 1.6 Configurar STP como Root Bridge
+enable
+configure terminal
+
+**Activar Rapid PVST+**
+spanning-tree mode rapid-pvst
+
+**Hacer este switch Root Bridge para todas las VLANs**
+spanning-tree vlan 1-1000 root primary
+
+**Verificar STP**
+show spanning-tree summary
+
+## 2. Configuración de Este-SW
+### 2.1 Configuración base (cambiar hostname a Este-SW)
+### 2.2 Configurar VTP como Cliente
+enable
+configure terminal
+
+vtp mode client
+vtp domain 202300722
+vtp password area2
+
+**Verificar VTP (debe mostrar "Client")**
+show vtp status
+
+**Verificar que recibió las VLANs**
+show vlan brief
+
+### 2.3 Configurar EtherChannel hacia Principal-SW
+enable
+configure terminal
+
+interface port-channel 1
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed vlan 12,22,32,42,52,99
+exit
+
+interface range gigabitEthernet 0/1/1-3
+channel-group 1 mode desirable
+exit
+
+**Verificar EtherChannel**
+show etherchannel summary
+
+### 2.4 Configurar EtherChannel hacia Oeste-SW
+enable
+configure terminal
+
+**Crear Port-Channel 3**
+interface port-channel 3
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed vlan 12,22,32,42,52,99
+exit
+
+**Asignar las 3 interfaces físicas hacia NodoOeste**
+interface range gigabitEthernet 0/3/1-3
+channel-group 3 mode desirable
+exit
+
+### 2.5 Configurar puertos hacia los hospitales (acceso normal, sin EtherChannel)
+enable
+configure terminal
+
+**Puerto hacia Hospital Roosevelt (un solo enlace)**
+interface gigabitEthernet 0/2/1
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed vlan 12,22,32,42,52,99
+exit
+
+**Puerto hacia Hospital San Juan**
+interface gigabitEthernet 0/2/2
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed vlan 12,22,32,42,52,99
+exit
+
+**Puerto hacia Hospital IGSS Accidentes**
+interface gigabitEthernet 0/2/3
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed vlan 12,22,32,42,52,99
+exit
+
+**Verificar puertos trunk**
+show interfaces trunk
+
+## 3. Configuración de Oeste-SW (similar a Este-SW)
+### 3.1 Configuración base (hostname Oeste-SW)
+### 3.2 Configurar VTP como Cliente
+enable
+configure terminal
+
+vtp mode client
+vtp domain 202300722
+vtp password area2
+
+**Verificar VTP (debe mostrar "Client")**
+show vtp status
+
+**Verificar que recibió las VLANs**
+show vlan brief
+
+### 3.3: EtherChannel hacia Principal-SW (Port-Channel 2)
+enable
+configure terminal
+
+interface port-channel 2
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed vlan 12,22,32,42,52,99
+exit
+
+interface range gigabitEthernet 0/1/1-3
+channel-group 2 mode desirable
+exit
+
+**Verificar EtherChannel**
+show etherchannel summary
+
+### 3.4 Configurar EtherChannel hacia Este-SW
+enable
+configure terminal
+
+**Crear Port-Channel 2**
+interface port-channel 2
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed vlan 12,22,32,42,52,99
+exit
+
+**Asignar las 3 interfaces físicas hacia Este**
+interface range gigabitEthernet 0/3/1-3
+channel-group 2 mode desirable
+exit
+
+### 3.5 Configurar puertos hacia los hospitales (acceso normal, sin EtherChannel)
+enable
+configure terminal
+
+**Puerto hacia Hospital Especialidades**
+interface gigabitEthernet 0/2/1
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed vlan 12,22,32,42,52,99
+exit
+
+**Puerto hacia Hospital HIIR**
+interface gigabitEthernet 0/2/2
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed vlan 12,22,32,42,52,99
+exit
+
+**Puerto hacia Hospital Petapa**
+interface gigabitEthernet 0/2/3
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed vlan 12,22,32,42,52,99
+exit
+
+**Verificar puertos trunk**
+show interfaces trunk
+
+## 4-9. Configuración de Switches de Hospital
+### X.1 Configuración base (hostname según hospital)
+### X.2 VTP como Cliente
+enable
+configure terminal
+
+vtp mode client
+vtp domain 202300722
+vtp password area2
+
+show vtp status
+
+**Debe mostrar VLANs 12,22,32,42,52,99,999**
+show vlan brief
+
+### X.3 Configurar puerto trunk hacia el nodo (uplink)
+enable
+configure terminal
+
+interface gigabitEthernet 0/1
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed vlan 12,22,32,42,52,99
+exit
+
+### X.4 Configurar puertos de acceso para hubs (según cada hospital)
+#### Ejemplo para Hospital Roosevelt (3 hubs, 5 PCs):
+enable
+configure terminal
+
+**Hub1 (VLAN12) - puerto Fa0/1**
+interface fastEthernet 0/1
 switchport mode access
 switchport access vlan 12
 exit
 
-interface range fastEthernet 0/4-5
+**Hub2 (VLAN22) - puerto Fa0/2**
+interface fastEthernet 0/2
 switchport mode access
 switchport access vlan 22
 exit
 
-### Configuración de puertos no utilizados (VLAN Blackhole)
-interface range fastEthernet 0/6-24
+**Hub3 (VLAN32,42,52) - puerto Fa0/3**
+interface fastEthernet 0/3
+switchport mode access
+switchport access vlan 32
+exit
+
+**Nota: En el Hub3 van conectados 3 PCs (VLAN32,42,52) pero el puerto del switch es uno solo**
+**Las VLANs de los PCs dentro del mismo hub deben ser iguales.**
+**Ajusta según tu cableado real.**
+
+### X.5 Configurar puertos no utilizados (Blackhole)
+enable
+configure terminal
+
+**Asume que los puertos Fa0/4 al Fa0/24 están sin usar**
+interface range fastEthernet 0/4-24
 switchport mode access
 switchport access vlan 999
 shutdown
 exit
 
-### Configuración de puertos troncales (hacia SW-Central)
-interface range gigabitEthernet 0/1-3
-switchport mode trunk
-switchport trunk native vlan 99
-switchport trunk allowed vlan 12,22,32,42,52,99
-exit
+### X.6 Verificar configuración
+show vlan brief
+show interfaces status
+show interfaces trunk
 
-### Configuración de VTP
-#### En SW-Central (Servidor VTP):
-configure terminal
-vtp mode server
-vtp domain 202300722
-vtp password area2
-exit
+## 10. Configuración de PCs
+| Campo | Valor según tabla de subnetting |
+|---------|--------|
+|IP Address|(ver tabla)|
+|Subnet Mask|(ver tabla)|
+|Default Gateway|(ver tabla)|
 
-#### En cada SW-Hospital (Clientes VTP):
-configure terminal
-vtp mode client
-vtp domain 202300722
-vtp password area2
-exit
+## 11. Comandos útiles en switches
+**Ver VLANs y puertos asignados**
+show vlan brief              
 
-### Configuración de EtherChannel (PAgP)
-#### En SW-Central (por cada conexión a hospital):
-configure terminal
-interface port-channel 1
-switchport mode trunk
-switchport trunk native vlan 99
-switchport trunk allowed vlan 12,22,32,42,52,99
-exit
+**Ver puertos trunk**
+show interfaces trunk
 
-interface range gigabitEthernet 0/1-3
-channel-group 1 mode desirable
-exit
-
-#### En cada SW-Hospital:
-configure terminal
-interface port-channel 1
-switchport mode trunk
-switchport trunk native vlan 99
-switchport trunk allowed vlan 12,22,32,42,52,99
-exit
-
-interface range gigabitEthernet 0/1-3
-channel-group 1 mode desirable
-exit
-
-#### Verificar EtherChannel:
+**Ver EtherChannel**
 show etherchannel summary
 
-### Configuración de STP (Rapid PVST+)
-#### En todos los switches:
-configure terminal
-spanning-tree mode rapid-pvst
-exit
-
-#### Hacer que SW-Central sea Root Bridge para todas las VLANs:
-configure terminal
-spanning-tree vlan 1-1000 root primary
-exit
-
-#### Verificar STP
+**Ver STP**
 show spanning-tree summary
+
+**Ver estado VTP**
+show vtp status
+
+**Ver configuración completa**
+show running-config
