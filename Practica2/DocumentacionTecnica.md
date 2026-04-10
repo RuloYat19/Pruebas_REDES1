@@ -416,3 +416,63 @@ exit
 
 #### Verificar STP
 show spanning-tree summary
+
+## Capturas de configuración
+**Configuración base de los switches**
+![Configuración base de los switches](Imagenes/I1.png)
+
+**Creacion de las VLANs**
+![Creacion de las VLANs](Imagenes/I2.png)
+
+**Puertos de acceso**
+![Puertos de acceso](Imagenes/I3.png)
+
+**Puertos troncales**
+![Puertos troncales](Imagenes/I4.png)
+
+**VTP - Servidor**
+![VTP - Servidor](Imagenes/I5.png)
+
+**VTP - Cliente**
+![VTP - Cliente](Imagenes/I6.png)
+
+**EtherChannel**
+![EtherChannel](Imagenes/I7.png)
+
+**STP Rapid PVST+**
+![STP Rapid PVST+](Imagenes/I8.png)
+
+**Verificación - show vlan brief**
+![Verificación - show vlan brief](Imagenes/I9.png)
+
+**Verificación - show interfaces trunk**
+![Verificación - show interfaces trunk](Imagenes/I10.png)
+
+**Verificación - show etherchannel summary**
+![Verificación - show etherchannel summary](Imagenes/I11.png)
+
+**Verificación - show spanning-tree summary**
+![Verificación - show spanning-tree summary](Imagenes/I12.png)
+
+**Verificación - show vtp status**
+![Verificación - show vtp status](Imagenes/I13.png)
+
+## Captura de pings exitosos
+**Ping de VLAN 12 exitoso**
+![Ping de VLAN 12 exitoso](Imagenes/I14.png)
+
+**Ping de VLAN 22 exitoso**
+![Ping de VLAN 22 exitoso](Imagenes/I15.png)
+
+**Ping de VLAN 32 exitoso**
+![Ping de VLAN 32 exitoso](Imagenes/I16.png)
+
+**Ping de VLAN 42 exitoso**
+![Ping de VLAN 42 exitoso](Imagenes/I17.png)
+
+**Ping de VLAN 52 exitoso**
+![Ping de VLAN 52 exitoso](Imagenes/I18.png)
+
+## Captura de simulación ARP/ICMP
+![Simulación 1](Imagenes/I19.png)
+![Simulación 2](Imagenes/I20.png)
