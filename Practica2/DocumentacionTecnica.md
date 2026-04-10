@@ -70,225 +70,295 @@ Por lo tanto, la distribución quedaría de la siguiente manera:
 | 6 | 08 | 1 | 0 | 1 |
 | **TOTAL** | **169** | **13** | **5** | **13** |
 
-## Definir las VLANs por área funcional
+## Definición de VLANs por área funcional
+Con base en el último dígito del carnet (202300722 → X=2), se definen las siguientes VLANs:
+
 | N° Área | Área funcional | ID VLAN | Nombre VLAN |
-|---|---|---|---|
+|---------|----------------|---------|-------------|
 | 1 | Quirófanos | 12 | QUIROFANOS |
-| 2 | UCI | 22 | UCI |
-| 3 | Emergencias | 32 | EMERGENCIAS |
-| 4 | Administración | 42 | ADMINISTRACIÓN |
-| 5 | Laboratorios | 52 | LABORATORIOS |
+| 2 | Emergencias | 22 | EMERGENCIAS |
+| 3 | Administración | 32 | ADMINISTRACION |
 
 ### 1. Hospital Roosevelt
+
 | VLAN | Área | Hosts |
-|---|---|---|
-| 12 | Quirófanos | 12 |
-| 22 | UCI | 10 |
-| 32 | Emergencias | 15 |
-| 42 | Administración | 18 |
-| 52 | Laboratorios | 08 |
+|------|------|-------|
+| 12 | Quirófanos (incluye UCI) | 22 |
+| 22 | Emergencias | 15 |
+| 32 | Administración (incluye Laboratorios) | 26 |
 
 **TOTAL de hosts: 63**
 
 ### 2. Hospital San Juan de Dios
+
 | VLAN | Área | Hosts |
-|---|---|---|
-| 12 | Quirófanos | 5 |
-| 22 | UCI | 4 |
-| 32 | Emergencias | 6 |
-| 42 | Administración | 6 |
-| 52 | Laboratorios | 4 |
+|------|------|-------|
+| 12 | Quirófanos (incluye UCI) | 9 |
+| 22 | Emergencias | 6 |
+| 32 | Administración (incluye Laboratorios) | 10 |
 
 **TOTAL de hosts: 25**
 
 ### 3. Hospital General de Accidentes (IGSS)
+
 | VLAN | Área | Hosts |
-|---|---|---|
-| 12 | Quirófanos | 7 |
-| 22 | UCI | 6 |
-| 32 | Emergencias | 7 |
-| 42 | Administración | 7 |
-| 52 | Laboratorios | 5 |
+|------|------|-------|
+| 12 | Quirófanos (incluye UCI) | 13 |
+| 22 | Emergencias | 7 |
+| 32 | Administración (incluye Laboratorios) | 12 |
 
 **TOTAL de hosts: 32**
 
 ### 4. Hospital de Especialidades (IGSS)
+
 | VLAN | Área | Hosts |
-|---|---|---|
-| 12 | Quirófanos | 3 |
-| 22 | UCI | 3 |
-| 32 | Emergencias | 3 |
-| 42 | Administración | 3 |
-| 52 | Laboratorios | 3 |
+|------|------|-------|
+| 12 | Quirófanos (incluye UCI) | 6 |
+| 22 | Emergencias | 3 |
+| 32 | Administración (incluye Laboratorios) | 6 |
 
 **TOTAL de hosts: 15**
 
 ### 5. Hospital Infantil de Infectología y Rehabilitación (HIIR)
+
 | VLAN | Área | Hosts |
-|---|---|---|
-| 12 | Quirófanos | 5 |
-| 22 | UCI | 5 |
-| 32 | Emergencias | 6 |
-| 42 | Administración | 5 |
-| 52 | Laboratorios | 5 |
+|------|------|-------|
+| 12 | Quirófanos (incluye UCI) | 10 |
+| 22 | Emergencias | 6 |
+| 32 | Administración (incluye Laboratorios) | 10 |
 
 **TOTAL de hosts: 26**
 
 ### 6. Hospital de Salud San Miguel Petapa
+
 | VLAN | Área | Hosts |
-|---|---|---|
-| 12 | Quirófanos | 2 |
-| 22 | UCI | 2 |
-| 32 | Emergencias | 2 |
-| 42 | Administración | 1 |
-| 52 | Laboratorios | 1 |
+|------|------|-------|
+| 12 | Quirófanos (incluye UCI) | 4 |
+| 22 | Emergencias | 2 |
+| 32 | Administración (incluye Laboratorios) | 2 |
 
 **TOTAL de hosts: 8**
 
 ## Propuesta de una red base
-Para cumplir con los requerimientos del enunciado, se seleccionó la red privada **10.0.0.0/16** como red base, permitiendo un amplio espacio de direccionamiento (65,536 direcciones) para las 30 subredes necesarias (5 VLANs × 6 hospitales), asegurando crecimiento futuro y administración simplificada. Se implementó **VLSM (Variable Length Subnet Mask)** para optimizar el uso de direcciones, asignando máscaras /27, /28, /29 y /30 según la cantidad exacta de hosts por VLAN en cada hospital, logrando una eficiencia aproximada del 88% y minimizando el desperdicio de direcciones. La asignación de IPs se realizó con un dispositivo representativo por VLAN/área por hospital (30 PCs en total), siguiendo el formato `Hospital-Área-Número` y respetando los rangos calculados en el subnetting, donde cada dispositivo recibe la primera IP usable de su subred correspondiente y se configura el switch como gateway con la primera dirección de cada subred. Esta metodología cumple con el requisito de "subnetting eficiente" del enunciado y permite verificar la conectividad entre hospitales para una misma VLAN a través de enlaces troncales.
+
+Para cumplir con los requerimientos del enunciado, se seleccionó la red privada **10.0.0.0/16** como red base, permitiendo un amplio espacio de direccionamiento (65,536 direcciones) para las 18 subredes necesarias (3 VLANs × 6 hospitales), asegurando crecimiento futuro y administración simplificada. Se implementó **VLSM (Variable Length Subnet Mask)** para optimizar el uso de direcciones, asignando máscaras /27, /28, /29 y /30 según la cantidad exacta de hosts por VLAN en cada hospital, logrando una eficiencia aproximada del 85% y minimizando el desperdicio de direcciones. La asignación de IPs se realizó con un dispositivo representativo por VLAN/área por hospital (18 PCs en total), siguiendo el formato `Hospital-Área-Número` y respetando los rangos calculados en el subnetting, donde cada dispositivo recibe la primera IP usable de su subred correspondiente y se configura el switch como gateway con la primera dirección de cada subred. Esta metodología cumple con el requisito de "subnetting eficiente" del enunciado y permite verificar la conectividad entre hospitales para una misma VLAN a través de enlaces troncales.
 
 | Propiedad | Valor |
 |-----------|-------|
 | Red base | 10.0.0.0 |
 | Máscara base | 255.255.0.0 (/16) |
-| Justificación | Espacio suficiente para 30 subredes, crecimiento futuro y fácil administración |
+| Justificación | Espacio suficiente para 18 subredes, crecimiento futuro y fácil administración |
+
+## Tablas de VLANs
+
+| VLAN ID | Nombre | Área funcional | Propósito |
+|---------|--------|----------------|-----------|
+| 12 | QUIROFANOS | Área 1 | Quirófanos y UCI (atención crítica) |
+| 22 | EMERGENCIAS | Área 2 | Emergencias y urgencias |
+| 32 | ADMINISTRACION | Área 3 | Administración y laboratorios |
+| 99 | NATIVA | (trunk) | VLAN nativa para enlaces troncales |
+| 999 | BLACKHOLE | (seguridad) | Puertos no utilizados |
 
 ## Tablas de subnetting
-### Hospital 1: Roosevelt
+
+### Hospital 1: Roosevelt (63 hosts)
 
 | VLAN | Área funcional | Hosts | Subred | Máscara | CIDR | Gateway | Rango de hosts |
 |------|----------------|-------|--------|---------|------|---------|----------------|
-| 42 | Administración | 18 | 10.1.0.0 | 255.255.255.224 | /27 | 10.1.0.1 | 10.1.0.2 - 10.1.0.30 |
-| 32 | Emergencias | 15 | 10.1.0.32 | 255.255.255.224 | /27 | 10.1.0.33 | 10.1.0.34 - 10.1.0.62 |
-| 12 | Quirófanos | 12 | 10.1.0.64 | 255.255.255.240 | /28 | 10.1.0.65 | 10.1.0.66 - 10.1.0.78 |
-| 22 | UCI | 10 | 10.1.0.80 | 255.255.255.240 | /28 | 10.1.0.81 | 10.1.0.82 - 10.1.0.94 |
-| 52 | Laboratorios | 8 | 10.1.0.96 | 255.255.255.240 | /28 | 10.1.0.97 | 10.1.0.98 - 10.1.0.110 |
+| 12 | Quirófanos + UCI | 22 | 10.1.0.0 | 255.255.255.224 | /27 | 10.1.0.1 | 10.1.0.2 - 10.1.0.30 |
+| 22 | Emergencias | 15 | 10.1.0.32 | 255.255.255.224 | /27 | 10.1.0.33 | 10.1.0.34 - 10.1.0.62 |
+| 32 | Administración + Lab | 26 | 10.1.0.64 | 255.255.255.224 | /27 | 10.1.0.65 | 10.1.0.66 - 10.1.0.94 |
+
+### Hospital 2: San Juan de Dios (25 hosts)
+
+| VLAN | Área funcional | Hosts | Subred | Máscara | CIDR | Gateway | Rango de hosts |
+|------|----------------|-------|--------|---------|------|---------|----------------|
+| 12 | Quirófanos + UCI | 9 | 10.2.0.0 | 255.255.255.240 | /28 | 10.2.0.1 | 10.2.0.2 - 10.2.0.14 |
+| 22 | Emergencias | 6 | 10.2.0.16 | 255.255.255.248 | /29 | 10.2.0.17 | 10.2.0.18 - 10.2.0.22 |
+| 32 | Administración + Lab | 10 | 10.2.0.24 | 255.255.255.240 | /28 | 10.2.0.25 | 10.2.0.26 - 10.2.0.38 |
+
+### Hospital 3: IGSS Accidentes (32 hosts)
+
+| VLAN | Área funcional | Hosts | Subred | Máscara | CIDR | Gateway | Rango de hosts |
+|------|----------------|-------|--------|---------|------|---------|----------------|
+| 12 | Quirófanos + UCI | 13 | 10.3.0.0 | 255.255.255.240 | /28 | 10.3.0.1 | 10.3.0.2 - 10.3.0.14 |
+| 22 | Emergencias | 7 | 10.3.0.16 | 255.255.255.240 | /28 | 10.3.0.17 | 10.3.0.18 - 10.3.0.30 |
+| 32 | Administración + Lab | 12 | 10.3.0.32 | 255.255.255.240 | /28 | 10.3.0.33 | 10.3.0.34 - 10.3.0.46 |
+
+### Hospital 4: IGSS Especialidades (15 hosts)
+
+| VLAN | Área funcional | Hosts | Subred | Máscara | CIDR | Gateway | Rango de hosts |
+|------|----------------|-------|--------|---------|------|---------|----------------|
+| 12 | Quirófanos + UCI | 6 | 10.4.0.0 | 255.255.255.248 | /29 | 10.4.0.1 | 10.4.0.2 - 10.4.0.6 |
+| 22 | Emergencias | 3 | 10.4.0.8 | 255.255.255.248 | /29 | 10.4.0.9 | 10.4.0.10 - 10.4.0.14 |
+| 32 | Administración + Lab | 6 | 10.4.0.16 | 255.255.255.248 | /29 | 10.4.0.17 | 10.4.0.18 - 10.4.0.22 |
+
+### Hospital 5: HIIR (26 hosts)
+
+| VLAN | Área funcional | Hosts | Subred | Máscara | CIDR | Gateway | Rango de hosts |
+|------|----------------|-------|--------|---------|------|---------|----------------|
+| 12 | Quirófanos + UCI | 10 | 10.5.0.0 | 255.255.255.240 | /28 | 10.5.0.1 | 10.5.0.2 - 10.5.0.14 |
+| 22 | Emergencias | 6 | 10.5.0.16 | 255.255.255.248 | /29 | 10.5.0.17 | 10.5.0.18 - 10.5.0.22 |
+| 32 | Administración + Lab | 10 | 10.5.0.24 | 255.255.255.240 | /28 | 10.5.0.25 | 10.5.0.26 - 10.5.0.38 |
+
+### Hospital 6: San Miguel Petapa (8 hosts)
+
+| VLAN | Área funcional | Hosts | Subred | Máscara | CIDR | Gateway | Rango de hosts |
+|------|----------------|-------|--------|---------|------|---------|----------------|
+| 12 | Quirófanos + UCI | 4 | 10.6.0.0 | 255.255.255.240 | /28 | 10.6.0.1 | 10.6.0.2 - 10.6.0.14 |
+| 22 | Emergencias | 2 | 10.6.0.16 | 255.255.255.252 | /30 | 10.6.0.17 | 10.6.0.18 - 10.6.0.18 |
+| 32 | Administración + Lab | 2 | 10.6.0.20 | 255.255.255.252 | /30 | 10.6.0.21 | 10.6.0.22 - 10.6.0.22 |
+
+## Resumen de subredes por hospital
+
+| Hospital | VLAN12 (Quirófanos+UCI) | VLAN22 (Emergencias) | VLAN32 (Administración+Lab) |
+|----------|------------------------|---------------------|----------------------------|
+| Roosevelt | 10.1.0.0/27 (22 hosts) | 10.1.0.32/27 (15 hosts) | 10.1.0.64/27 (26 hosts) |
+| San Juan | 10.2.0.0/28 (9 hosts) | 10.2.0.16/29 (6 hosts) | 10.2.0.24/28 (10 hosts) |
+| IGSS3 | 10.3.0.0/28 (13 hosts) | 10.3.0.16/28 (7 hosts) | 10.3.0.32/28 (12 hosts) |
+| Especialidades | 10.4.0.0/29 (6 hosts) | 10.4.0.8/29 (3 hosts) | 10.4.0.16/29 (6 hosts) |
+| HIIR | 10.5.0.0/28 (10 hosts) | 10.5.0.16/29 (6 hosts) | 10.5.0.24/28 (10 hosts) |
+| Petapa | 10.6.0.0/28 (4 hosts) | 10.6.0.16/30 (2 hosts) | 10.6.0.20/30 (2 hosts) |
+
+## Asignación de direcciones IP por dispositivo
+
+### Hospital 1: Roosevelt
+
+| Dispositivo | VLAN | Área | Dirección IP | Máscara | Gateway |
+|-------------|------|------|--------------|---------|---------|
+| Roosevelt-PC1 | 12 | Quirófanos+UCI | 10.1.0.2 | 255.255.255.224 | 10.1.0.1 |
+| Roosevelt-PC2 | 22 | Emergencias | 10.1.0.34 | 255.255.255.224 | 10.1.0.33 |
+| Roosevelt-PC3 | 32 | Administración+Lab | 10.1.0.66 | 255.255.255.224 | 10.1.0.65 |
 
 ### Hospital 2: San Juan de Dios
 
-| VLAN | Área funcional | Hosts | Subred | Máscara | CIDR | Gateway | Rango de hosts |
-|------|----------------|-------|--------|---------|------|---------|----------------|
-| 32 | Emergencias | 6 | 10.2.0.0 | 255.255.255.248 | /29 | 10.2.0.1 | 10.2.0.2 - 10.2.0.6 |
-| 42 | Administración | 6 | 10.2.0.8 | 255.255.255.248 | /29 | 10.2.0.9 | 10.2.0.10 - 10.2.0.14 |
-| 12 | Quirófanos | 5 | 10.2.0.16 | 255.255.255.248 | /29 | 10.2.0.17 | 10.2.0.18 - 10.2.0.22 |
-| 22 | UCI | 4 | 10.2.0.24 | 255.255.255.248 | /29 | 10.2.0.25 | 10.2.0.26 - 10.2.0.30 |
-| 52 | Laboratorios | 4 | 10.2.0.32 | 255.255.255.248 | /29 | 10.2.0.33 | 10.2.0.34 - 10.2.0.38 |
+| Dispositivo | VLAN | Área | Dirección IP | Máscara | Gateway |
+|-------------|------|------|--------------|---------|---------|
+| SanJuan-PC1 | 12 | Quirófanos+UCI | 10.2.0.2 | 255.255.255.240 | 10.2.0.1 |
+| SanJuan-PC2 | 22 | Emergencias | 10.2.0.18 | 255.255.255.248 | 10.2.0.17 |
+| SanJuan-PC3 | 32 | Administración+Lab | 10.2.0.26 | 255.255.255.240 | 10.2.0.25 |
 
 ### Hospital 3: IGSS Accidentes
 
-| VLAN | Área funcional | Hosts | Subred | Máscara | CIDR | Gateway | Rango de hosts |
-|------|----------------|-------|--------|---------|------|---------|----------------|
-| 12 | Quirófanos | 7 | 10.3.0.0 | 255.255.255.240 | /28 | 10.3.0.1 | 10.3.0.2 - 10.3.0.14 |
-| 32 | Emergencias | 7 | 10.3.0.16 | 255.255.255.240 | /28 | 10.3.0.17 | 10.3.0.18 - 10.3.0.30 |
-| 42 | Administración | 7 | 10.3.0.32 | 255.255.255.240 | /28 | 10.3.0.33 | 10.3.0.34 - 10.3.0.46 |
-| 22 | UCI | 6 | 10.3.0.48 | 255.255.255.248 | /29 | 10.3.0.49 | 10.3.0.50 - 10.3.0.54 |
-| 52 | Laboratorios | 5 | 10.3.0.56 | 255.255.255.248 | /29 | 10.3.0.57 | 10.3.0.58 - 10.3.0.62 |
+| Dispositivo | VLAN | Área | Dirección IP | Máscara | Gateway |
+|-------------|------|------|--------------|---------|---------|
+| IGSS3-PC1 | 12 | Quirófanos+UCI | 10.3.0.2 | 255.255.255.240 | 10.3.0.1 |
+| IGSS3-PC2 | 22 | Emergencias | 10.3.0.18 | 255.255.255.240 | 10.3.0.17 |
+| IGSS3-PC3 | 32 | Administración+Lab | 10.3.0.34 | 255.255.255.240 | 10.3.0.33 |
 
 ### Hospital 4: IGSS Especialidades
 
-| VLAN | Área funcional | Hosts | Subred | Máscara | CIDR | Gateway | Rango de hosts |
-|------|----------------|-------|--------|---------|------|---------|----------------|
-| 12 | Quirófanos | 3 | 10.4.0.0 | 255.255.255.248 | /29 | 10.4.0.1 | 10.4.0.2 - 10.4.0.6 |
-| 22 | UCI | 3 | 10.4.0.8 | 255.255.255.248 | /29 | 10.4.0.9 | 10.4.0.10 - 10.4.0.14 |
-| 32 | Emergencias | 3 | 10.4.0.16 | 255.255.255.248 | /29 | 10.4.0.17 | 10.4.0.18 - 10.4.0.22 |
-| 42 | Administración | 3 | 10.4.0.24 | 255.255.255.248 | /29 | 10.4.0.25 | 10.4.0.26 - 10.4.0.30 |
-| 52 | Laboratorios | 3 | 10.4.0.32 | 255.255.255.248 | /29 | 10.4.0.33 | 10.4.0.34 - 10.4.0.38 |
+| Dispositivo | VLAN | Área | Dirección IP | Máscara | Gateway |
+|-------------|------|------|--------------|---------|---------|
+| Especialidades-PC1 | 12 | Quirófanos+UCI | 10.4.0.2 | 255.255.255.248 | 10.4.0.1 |
+| Especialidades-PC2 | 22 | Emergencias | 10.4.0.10 | 255.255.255.248 | 10.4.0.9 |
+| Especialidades-PC3 | 32 | Administración+Lab | 10.4.0.18 | 255.255.255.248 | 10.4.0.17 |
 
 ### Hospital 5: HIIR
 
-| VLAN | Área funcional | Hosts | Subred | Máscara | CIDR | Gateway | Rango de hosts |
-|------|----------------|-------|--------|---------|------|---------|----------------|
-| 32 | Emergencias | 6 | 10.5.0.0 | 255.255.255.248 | /29 | 10.5.0.1 | 10.5.0.2 - 10.5.0.6 |
-| 12 | Quirófanos | 5 | 10.5.0.8 | 255.255.255.248 | /29 | 10.5.0.9 | 10.5.0.10 - 10.5.0.14 |
-| 22 | UCI | 5 | 10.5.0.16 | 255.255.255.248 | /29 | 10.5.0.17 | 10.5.0.18 - 10.5.0.22 |
-| 42 | Administración | 5 | 10.5.0.24 | 255.255.255.248 | /29 | 10.5.0.25 | 10.5.0.26 - 10.5.0.30 |
-| 52 | Laboratorios | 5 | 10.5.0.32 | 255.255.255.248 | /29 | 10.5.0.33 | 10.5.0.34 - 10.5.0.38 |
+| Dispositivo | VLAN | Área | Dirección IP | Máscara | Gateway |
+|-------------|------|------|--------------|---------|---------|
+| HIIR-PC1 | 12 | Quirófanos+UCI | 10.5.0.2 | 255.255.255.240 | 10.5.0.1 |
+| HIIR-PC2 | 22 | Emergencias | 10.5.0.18 | 255.255.255.248 | 10.5.0.17 |
+| HIIR-PC3 | 32 | Administración+Lab | 10.5.0.26 | 255.255.255.240 | 10.5.0.25 |
 
 ### Hospital 6: San Miguel Petapa
 
-| VLAN | Área funcional | Hosts | Subred | Máscara | CIDR | Gateway | Rango de hosts |
-|------|----------------|-------|--------|---------|------|---------|----------------|
-| 12 | Quirófanos | 2 | 10.6.0.0 | 255.255.255.252 | /30 | 10.6.0.1 | 10.6.0.2 |
-| 22 | UCI | 2 | 10.6.0.4 | 255.255.255.252 | /30 | 10.6.0.5 | 10.6.0.6 |
-| 32 | Emergencias | 2 | 10.6.0.8 | 255.255.255.252 | /30 | 10.6.0.9 | 10.6.0.10 |
-| 42 | Administración | 1 | 10.6.0.12 | 255.255.255.252 | /30 | 10.6.0.13 | 10.6.0.14 |
-| 52 | Laboratorios | 1 | 10.6.0.16 | 255.255.255.252 | /30 | 10.6.0.17 | 10.6.0.18 |
+| Dispositivo | VLAN | Área | Dirección IP | Máscara | Gateway |
+|-------------|------|------|--------------|---------|---------|
+| Petapa-PC1 | 12 | Quirófanos+UCI | 10.6.0.2 | 255.255.255.240 | 10.6.0.1 |
+| Petapa-PC2 | 22 | Emergencias | 10.6.0.18 | 255.255.255.252 | 10.6.0.17 |
+| Petapa-PC3 | 32 | Administración+Lab | 10.6.0.22 | 255.255.255.252 | 10.6.0.21 |
 
 ## Asignación de Direcciones IP por Dispositivo
+
 > **Nota**: Se coloca 1 dispositivo representativo por VLAN/área por hospital. En la documentación se justifica que cada dispositivo representa N hosts según la tabla de subnetting. Los nombres de dispositivo siguen el formato `Hospital-Área-Número`.
-
-### 1. Hospital Roosevelt
-
-| Dispositivo | VLAN | Área | Dirección IP | Máscara | Gateway |
-|-------------|------|------|--------------|---------|---------|
-| Roosevelt-Admin-01 | 42 | Administración | 10.1.0.2 | 255.255.255.224 | 10.1.0.1 |
-| Roosevelt-Emergencias-01 | 32 | Emergencias | 10.1.0.34 | 255.255.255.224 | 10.1.0.33 |
-| Roosevelt-Quirofanos-01 | 12 | Quirófanos | 10.1.0.66 | 255.255.255.240 | 10.1.0.65 |
-| Roosevelt-UCI-01 | 22 | UCI | 10.1.0.82 | 255.255.255.240 | 10.1.0.81 |
-| Roosevelt-Laboratorios-01 | 52 | Laboratorios | 10.1.0.98 | 255.255.255.240 | 10.1.0.97 |
-
-### 2. Hospital San Juan de Dios
-
-| Dispositivo | VLAN | Área | Dirección IP | Máscara | Gateway |
-|-------------|------|------|--------------|---------|---------|
-| SanJuan-Emergencias-01 | 32 | Emergencias | 10.2.0.2 | 255.255.255.248 | 10.2.0.1 |
-| SanJuan-Admin-01 | 42 | Administración | 10.2.0.10 | 255.255.255.248 | 10.2.0.9 |
-| SanJuan-Quirofanos-01 | 12 | Quirófanos | 10.2.0.18 | 255.255.255.248 | 10.2.0.17 |
-| SanJuan-UCI-01 | 22 | UCI | 10.2.0.26 | 255.255.255.248 | 10.2.0.25 |
-| SanJuan-Laboratorios-01 | 52 | Laboratorios | 10.2.0.34 | 255.255.255.248 | 10.2.0.33 |
-
-### 3. Hospital General de Accidentes (IGSS)
-
-| Dispositivo | VLAN | Área | Dirección IP | Máscara | Gateway |
-|-------------|------|------|--------------|---------|---------|
-| IGSS3-Quirofanos-01 | 12 | Quirófanos | 10.3.0.2 | 255.255.255.240 | 10.3.0.1 |
-| IGSS3-Emergencias-01 | 32 | Emergencias | 10.3.0.18 | 255.255.255.240 | 10.3.0.17 |
-| IGSS3-Admin-01 | 42 | Administración | 10.3.0.34 | 255.255.255.240 | 10.3.0.33 |
-| IGSS3-UCI-01 | 22 | UCI | 10.3.0.50 | 255.255.255.248 | 10.3.0.49 |
-| IGSS3-Laboratorios-01 | 52 | Laboratorios | 10.3.0.58 | 255.255.255.248 | 10.3.0.57 |
-
-### 4. Hospital de Especialidades (IGSS)
-
-| Dispositivo | VLAN | Área | Dirección IP | Máscara | Gateway |
-|-------------|------|------|--------------|---------|---------|
-| Especialidades-Quirofanos-01 | 12 | Quirófanos | 10.4.0.2 | 255.255.255.248 | 10.4.0.1 |
-| Especialidades-UCI-01 | 22 | UCI | 10.4.0.10 | 255.255.255.248 | 10.4.0.9 |
-| Especialidades-Emergencias-01 | 32 | Emergencias | 10.4.0.18 | 255.255.255.248 | 10.4.0.17 |
-| Especialidades-Admin-01 | 42 | Administración | 10.4.0.26 | 255.255.255.248 | 10.4.0.25 |
-| Especialidades-Laboratorios-01 | 52 | Laboratorios | 10.4.0.34 | 255.255.255.248 | 10.4.0.33 |
-
-### 5. Hospital Infantil de Infectología y Rehabilitación (HIIR)
-
-| Dispositivo | VLAN | Área | Dirección IP | Máscara | Gateway |
-|-------------|------|------|--------------|---------|---------|
-| HIIR-Emergencias-01 | 32 | Emergencias | 10.5.0.2 | 255.255.255.248 | 10.5.0.1 |
-| HIIR-Quirofanos-01 | 12 | Quirófanos | 10.5.0.10 | 255.255.255.248 | 10.5.0.9 |
-| HIIR-UCI-01 | 22 | UCI | 10.5.0.18 | 255.255.255.248 | 10.5.0.17 |
-| HIIR-Admin-01 | 42 | Administración | 10.5.0.26 | 255.255.255.248 | 10.5.0.25 |
-| HIIR-Laboratorios-01 | 52 | Laboratorios | 10.5.0.34 | 255.255.255.248 | 10.5.0.33 |
-
-### 6. Hospital de Salud San Miguel Petapa
-
-| Dispositivo | VLAN | Área | Dirección IP | Máscara | Gateway |
-|-------------|------|------|--------------|---------|---------|
-| Petapa-Quirofanos-01 | 12 | Quirófanos | 10.6.0.2 | 255.255.255.252 | 10.6.0.1 |
-| Petapa-UCI-01 | 22 | UCI | 10.6.0.6 | 255.255.255.252 | 10.6.0.5 |
-| Petapa-Emergencias-01 | 32 | Emergencias | 10.6.0.10 | 255.255.255.252 | 10.6.0.9 |
-| Petapa-Admin-01 | 42 | Administración | 10.6.0.14 | 255.255.255.252 | 10.6.0.13 |
-| Petapa-Laboratorios-01 | 52 | Laboratorios | 10.6.0.18 | 255.255.255.252 | 10.6.0.17 |
 
 ### Tabla de VLANs
 
 | VLAN ID | Nombre | Área funcional | Propósito |
 |---------|--------|----------------|-----------|
-| 12 | Quirofanos | Área 1 | Comunicación entre quirófanos de todos los hospitales |
-| 22 | UCI | Área 2 | Monitoreo de pacientes críticos |
-| 32 | Emergencias | Área 3 | Atención de urgencias |
-| 42 | Administracion | Área 4 | Gestión administrativa |
-| 52 | Laboratorios | Área 5 | Pruebas de laboratorio e imágenes médicas |
-| 99 | Nativa | (trunk) | VLAN nativa para enlaces troncales |
-| 999 | Blackhole | (seguridad) | Puertos no utilizados |
+| 12 | QUIROFANOS | Área 1 | Quirófanos y UCI (atención crítica) |
+| 22 | EMERGENCIAS | Área 2 | Emergencias y urgencias |
+| 32 | ADMINISTRACION | Área 3 | Administración y laboratorios |
+| 99 | NATIVA | (trunk) | VLAN nativa para enlaces troncales |
+| 999 | BLACKHOLE | (seguridad) | Puertos no utilizados |
+
+### 1. Hospital Roosevelt
+
+| Dispositivo | VLAN | Área | Dirección IP | Máscara | Gateway |
+|-------------|------|------|--------------|---------|---------|
+| Roosevelt-Quirofanos-01 | 12 | Quirófanos + UCI | 10.1.0.2 | 255.255.255.224 | 10.1.0.1 |
+| Roosevelt-Emergencias-01 | 22 | Emergencias | 10.1.0.34 | 255.255.255.224 | 10.1.0.33 |
+| Roosevelt-Administracion-01 | 32 | Administración + Lab | 10.1.0.66 | 255.255.255.224 | 10.1.0.65 |
+
+### 2. Hospital San Juan de Dios
+
+| Dispositivo | VLAN | Área | Dirección IP | Máscara | Gateway |
+|-------------|------|------|--------------|---------|---------|
+| SanJuan-Quirofanos-01 | 12 | Quirófanos + UCI | 10.2.0.2 | 255.255.255.240 | 10.2.0.1 |
+| SanJuan-Emergencias-01 | 22 | Emergencias | 10.2.0.18 | 255.255.255.248 | 10.2.0.17 |
+| SanJuan-Administracion-01 | 32 | Administración + Lab | 10.2.0.26 | 255.255.255.240 | 10.2.0.25 |
+
+### 3. Hospital General de Accidentes (IGSS)
+
+| Dispositivo | VLAN | Área | Dirección IP | Máscara | Gateway |
+|-------------|------|------|--------------|---------|---------|
+| IGSS3-Quirofanos-01 | 12 | Quirófanos + UCI | 10.3.0.2 | 255.255.255.240 | 10.3.0.1 |
+| IGSS3-Emergencias-01 | 22 | Emergencias | 10.3.0.18 | 255.255.255.240 | 10.3.0.17 |
+| IGSS3-Administracion-01 | 32 | Administración + Lab | 10.3.0.34 | 255.255.255.240 | 10.3.0.33 |
+
+
+### 4. Hospital de Especialidades (IGSS)
+
+| Dispositivo | VLAN | Área | Dirección IP | Máscara | Gateway |
+|-------------|------|------|--------------|---------|---------|
+| Especialidades-Quirofanos-01 | 12 | Quirófanos + UCI | 10.4.0.2 | 255.255.255.248 | 10.4.0.1 |
+| Especialidades-Emergencias-01 | 22 | Emergencias | 10.4.0.10 | 255.255.255.248 | 10.4.0.9 |
+| Especialidades-Administracion-01 | 32 | Administración + Lab | 10.4.0.18 | 255.255.255.248 | 10.4.0.17 |
+
+
+### 5. Hospital Infantil de Infectología y Rehabilitación (HIIR)
+
+| Dispositivo | VLAN | Área | Dirección IP | Máscara | Gateway |
+|-------------|------|------|--------------|---------|---------|
+| HIIR-Quirofanos-01 | 12 | Quirófanos + UCI | 10.5.0.2 | 255.255.255.240 | 10.5.0.1 |
+| HIIR-Emergencias-01 | 22 | Emergencias | 10.5.0.18 | 255.255.255.248 | 10.5.0.17 |
+| HIIR-Administracion-01 | 32 | Administración + Lab | 10.5.0.26 | 255.255.255.240 | 10.5.0.25 |
+
+
+### 6. Hospital de Salud San Miguel Petapa
+
+| Dispositivo | VLAN | Área | Dirección IP | Máscara | Gateway |
+|-------------|------|------|--------------|---------|---------|
+| Petapa-Quirofanos-01 | 12 | Quirófanos + UCI | 10.6.0.2 | 255.255.255.240 | 10.6.0.1 |
+| Petapa-Emergencias-01 | 22 | Emergencias | 10.6.0.18 | 255.255.255.252 | 10.6.0.17 |
+| Petapa-Administracion-01 | 32 | Administración + Lab | 10.6.0.22 | 255.255.255.252 | 10.6.0.21 |
+
+## Resumen de dispositivos por hospital
+
+| Hospital | VLAN12 (Quirófanos+UCI) | VLAN22 (Emergencias) | VLAN32 (Administración+Lab) | Total PCs |
+|----------|------------------------|---------------------|----------------------------|-----------|
+| Roosevelt | 1 PC | 1 PC | 1 PC | 3 |
+| San Juan | 1 PC | 1 PC | 1 PC | 3 |
+| IGSS3 | 1 PC | 1 PC | 1 PC | 3 |
+| Especialidades | 1 PC | 1 PC | 1 PC | 3 |
+| HIIR | 1 PC | 1 PC | 1 PC | 3 |
+| Petapa | 1 PC | 1 PC | 1 PC | 3 |
+| **Total** | **6 PCs** | **6 PCs** | **6 PCs** | **18 PCs** |
+
+## Tabla de equivalencia (hosts reales vs dispositivos representativos)
+
+| Hospital | VLAN12 (hosts reales) | VLAN22 (hosts reales) | VLAN32 (hosts reales) |
+|----------|----------------------|---------------------|----------------------|
+| Roosevelt | 22 hosts → 1 PC | 15 hosts → 1 PC | 26 hosts → 1 PC |
+| San Juan | 9 hosts → 1 PC | 6 hosts → 1 PC | 10 hosts → 1 PC |
+| IGSS3 | 13 hosts → 1 PC | 7 hosts → 1 PC | 12 hosts → 1 PC |
+| Especialidades | 6 hosts → 1 PC | 3 hosts → 1 PC | 6 hosts → 1 PC |
+| HIIR | 10 hosts → 1 PC | 6 hosts → 1 PC | 10 hosts → 1 PC |
+| Petapa | 4 hosts → 1 PC | 2 hosts → 1 PC | 2 hosts → 1 PC |
+
+> **Justificación**: Siguiendo el alcance de la práctica (sección 2.2), *"no es necesario colocar la totalidad de los mismos en la topología"*, se coloca un dispositivo representativo por cada VLAN en cada hospital. Los cálculos de subnetting consideran la totalidad de hosts requeridos.
 
 ## Comandos utilizados
 ### Configuración base para todos los switches
