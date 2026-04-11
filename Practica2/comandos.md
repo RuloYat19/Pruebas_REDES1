@@ -38,19 +38,11 @@ name Quirofanos
 exit
 
 vlan 22
-name UCI
-exit
-
-vlan 32
 name Emergencias
 exit
 
-vlan 42
+vlan 32
 name Administracion
-exit
-
-vlan 52
-name Laboratorios
 exit
 
 vlan 99
@@ -80,7 +72,7 @@ configure terminal
 interface port-channel 1
 switchport mode trunk
 switchport trunk native vlan 99
-switchport trunk allowed vlan 12,22,32,42,52,99
+switchport trunk allowed vlan 12,22,32,99
 exit
 
 **Asignar interfaces físicas al Port-Channel 1**
@@ -99,7 +91,7 @@ configure terminal
 interface port-channel 2
 switchport mode trunk
 switchport trunk native vlan 99
-switchport trunk allowed vlan 12,22,32,42,52,99
+switchport trunk allowed vlan 12,22,32,99
 exit
 
 **Asignar interfaces físicas al Port-Channel 2**
@@ -146,7 +138,7 @@ configure terminal
 interface port-channel 1
 switchport mode trunk
 switchport trunk native vlan 99
-switchport trunk allowed vlan 12,22,32,42,52,99
+switchport trunk allowed vlan 12,22,32,99
 exit
 
 interface range gigabitEthernet 0/1/1-3
@@ -160,11 +152,10 @@ show etherchannel summary
 enable
 configure terminal
 
-**Crear Port-Channel 3**
 interface port-channel 3
 switchport mode trunk
 switchport trunk native vlan 99
-switchport trunk allowed vlan 12,22,32,42,52,99
+switchport trunk allowed vlan 12,22,32,99
 exit
 
 **Asignar las 3 interfaces físicas hacia NodoOeste**
@@ -176,25 +167,25 @@ exit
 enable
 configure terminal
 
-**Puerto hacia Hospital Roosevelt (un solo enlace)**
+**Puerto hacia Hospital de Especialidades (IGSS)**
 interface gigabitEthernet 0/2/1
 switchport mode trunk
 switchport trunk native vlan 99
-switchport trunk allowed vlan 12,22,32,42,52,99
+switchport trunk allowed vlan 12,22,32,99
 exit
 
-**Puerto hacia Hospital San Juan**
+**Puerto hacia Hospital Infantil de Infectología y Rehabilitación (HIIR)**
 interface gigabitEthernet 0/2/2
 switchport mode trunk
 switchport trunk native vlan 99
-switchport trunk allowed vlan 12,22,32,42,52,99
+switchport trunk allowed vlan 12,22,32,99
 exit
 
-**Puerto hacia Hospital IGSS Accidentes**
+**Puerto hacia Hospital de Salud San Miguel Petapa**
 interface gigabitEthernet 0/2/3
 switchport mode trunk
 switchport trunk native vlan 99
-switchport trunk allowed vlan 12,22,32,42,52,99
+switchport trunk allowed vlan 12,22,32,99
 exit
 
 **Verificar puertos trunk**
@@ -223,7 +214,7 @@ configure terminal
 interface port-channel 2
 switchport mode trunk
 switchport trunk native vlan 99
-switchport trunk allowed vlan 12,22,32,42,52,99
+switchport trunk allowed vlan 12,22,32,99
 exit
 
 interface range gigabitEthernet 0/1/1-3
@@ -237,41 +228,40 @@ show etherchannel summary
 enable
 configure terminal
 
-**Crear Port-Channel 2**
-interface port-channel 2
+interface port-channel 3
 switchport mode trunk
 switchport trunk native vlan 99
-switchport trunk allowed vlan 12,22,32,42,52,99
+switchport trunk allowed vlan 12,22,32,99
 exit
 
 **Asignar las 3 interfaces físicas hacia Este**
 interface range gigabitEthernet 0/3/1-3
-channel-group 2 mode desirable
+channel-group 3 mode desirable
 exit
 
 ### 3.5 Configurar puertos hacia los hospitales (acceso normal, sin EtherChannel)
 enable
 configure terminal
 
-**Puerto hacia Hospital Especialidades**
+**Puerto hacia Hospital Roosevelt**
 interface gigabitEthernet 0/2/1
 switchport mode trunk
 switchport trunk native vlan 99
-switchport trunk allowed vlan 12,22,32,42,52,99
+switchport trunk allowed vlan 12,22,32,99
 exit
 
-**Puerto hacia Hospital HIIR**
+**Puerto hacia Hospital San Juan de Dios**
 interface gigabitEthernet 0/2/2
 switchport mode trunk
 switchport trunk native vlan 99
-switchport trunk allowed vlan 12,22,32,42,52,99
+switchport trunk allowed vlan 12,22,32,99
 exit
 
-**Puerto hacia Hospital Petapa**
+**Puerto hacia Hospital General de Accidentes (IGSS)**
 interface gigabitEthernet 0/2/3
 switchport mode trunk
 switchport trunk native vlan 99
-switchport trunk allowed vlan 12,22,32,42,52,99
+switchport trunk allowed vlan 12,22,32,99
 exit
 
 **Verificar puertos trunk**
@@ -289,7 +279,7 @@ vtp password area2
 
 show vtp status
 
-**Debe mostrar VLANs 12,22,32,42,52,99,999**
+**Debe mostrar VLANs 12,22,32,99,999**
 show vlan brief
 
 ### X.3 Configurar puerto trunk hacia el nodo (uplink)
@@ -299,7 +289,7 @@ configure terminal
 interface gigabitEthernet 0/1
 switchport mode trunk
 switchport trunk native vlan 99
-switchport trunk allowed vlan 12,22,32,42,52,99
+switchport trunk allowed vlan 12,22,32,99
 exit
 
 ### X.4 Configurar puertos de acceso para hubs (según cada hospital)
